@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$current_user = get_current_user();
 $flash_message = get_flash_message();
 ?>
 <!DOCTYPE html>
@@ -32,19 +33,80 @@ $flash_message = get_flash_message();
                             <i class="fas fa-home"></i> Inicio
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="add_product.php">
-                            <i class="fas fa-plus"></i> Agregar Producto
-                        </a>
-                    </li>
+                    <?php if (is_logged_in()): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="add_product.php">
+                                <i class="fas fa-plus"></i> Agregar Producto
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="my_products.php">
+                                <i class="fas fa-box"></i> Mis Productos
+                            </a>
+                        </li>
+                        <?php if (is_admin()): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="admin.php">
+                                    <i class="fas fa-cog"></i> Administración
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </ul>
-                <form class="d-flex" action="index.php" method="GET">
+                
+                <form class="d-flex me-2" action="index.php" method="GET">
                     <input class="form-control me-2" type="search" name="search" placeholder="Buscar productos..." 
                            value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
                     <button class="btn btn-outline-light" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
+                
+                <ul class="navbar-nav">
+                    <?php if (is_logged_in()): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user"></i> 
+                                <?php echo htmlspecialchars($current_user['username']); ?>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <span class="dropdown-item-text">
+                                        <small>Conectado como</small><br>
+                                        <strong><?php echo format_author_name($current_user); ?></strong>
+                                    </span>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="profile.php">
+                                    <i class="fas fa-user-edit"></i> Mi Perfil
+                                </a></li>
+                                <li><a class="dropdown-item" href="my_products.php">
+                                    <i class="fas fa-box"></i> Mis Productos
+                                </a></li>
+                                <?php if (is_admin()): ?>
+                                    <li><a class="dropdown-item" href="admin.php">
+                                        <i class="fas fa-cog"></i> Panel Admin
+                                    </a></li>
+                                <?php endif; ?>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="logout.php">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                </a></li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.php">
+                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="register.php">
+                                <i class="fas fa-user-plus"></i> Registrarse
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
             </div>
         </div>
     </nav>

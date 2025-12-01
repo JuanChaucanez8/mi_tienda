@@ -1,6 +1,7 @@
 <?php
 require_once 'includes/db.php';
 require_once 'includes/functions.php';
+require_login(); // Requiere que el usuario esté logueado
 
 $errors = [];
 $form_data = [
@@ -63,7 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $form_data['price'],
             $form_data['stock'],
             $form_data['category'],
-            $image_path
+            $image_path,
+            $_SESSION['user_id'] // Agregar user_id del usuario logueado
         ]);
         
         if ($result) {

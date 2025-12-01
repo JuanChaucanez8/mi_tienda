@@ -51,7 +51,19 @@
                     <h4>Descripción</h4>
                     <p class="card-text"><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
                 </div>
-                
+                <div class="mb-3">
+    <h5>Publicado por:</h5>
+    <div class="d-flex align-items-center">
+        <i class="fas fa-user me-2 text-muted"></i>
+        <div>
+            <strong><?php echo format_author_name($product); ?></strong>
+            <?php if ($product['author_username']): ?>
+                <br>
+                <small class="text-muted">@<?php echo htmlspecialchars($product['author_username']); ?></small>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
                 <div class="row text-muted mb-3">
                     <div class="col-6">
                         <small>

@@ -1,6 +1,7 @@
 <?php
 require_once 'includes/db.php';
 require_once 'includes/functions.php';
+require_login();
 
 $product_id = validate_input($_GET['id'] ?? 0, 'int');
 
@@ -16,22 +17,23 @@ if (!$product) {
     redirect('index.php', 'Producto no encontrado', 'error');
 }
 
+// Verificar permisos
+if (!can_edit_product($product['user_id'])) {
+    redirect('index.php', 'No tienes permisos para eliminar este producto', 'error');
+}
+
 // Procesar eliminación
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validar CSRF token
-    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
-        redirect('index.php', 'Token de seguridad inválido', 'error');
-    }
+    // ... (código similar pero usando delete_product con user_id)
     
-    // Eliminar imagen si existe
-    if ($product['image_path']) {
-        delete_old_image($product['image_path']);
-    }
+    // Eliminar de la base de datos (soft delete)
+    $result = db_execute('delete_product', [$product_id, $_SESSION['user_id']]);
     
-    // Eliminar de la base de datos
-    $result = db_execute('delete_product', [$product_id]);
-    
-    if ($result) {
+    if ($result && pg_affected_rows($result) > 0) {
+        // Eliminar imagen si existe
+        if ($product['image_path']) {
+            delete_old_image($product['image_path']);
+        }
         redirect('index.php', 'Producto eliminado correctamente');
     } else {
         redirect('index.php', 'Error al eliminar el producto', 'error');

@@ -113,11 +113,41 @@ function delete_old_image($image_path) {
 }
 
 /**
- * Verificar si el usuario está logueado (placeholder para futura implementación)
+ * Verificar si el usuario está logueado
  */
 function is_logged_in() {
-    // Para futura implementación de autenticación
-    return true; // Por ahora siempre retorna true
+    return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+}
+
+/**
+ * Obtener información del usuario actual
+ */
+function get_current_user() {
+    if (!is_logged_in()) {
+        return null;
+    }
+    
+    $result = db_execute('get_user_by_id', [$_SESSION['user_id']]);
+    return pg_fetch_assoc($result);
+}
+
+/**
+ * Verificar si el usuario es administrador
+ */
+function is_admin() {
+    $user = get_current_user();
+    return $user && $user['username'] === 'admin';
+}
+
+/**
+ * Verificar si el usuario puede editar/eliminar un producto
+ */
+function can_edit_product($product_user_id) {
+    if (!is_logged_in()) {
+        return false;
+    }
+    
+    return is_admin() || $_SESSION['user_id'] == $product_user_id;
 }
 
 /**
@@ -162,5 +192,58 @@ function paginate($total_items, $per_page = 10, $current_page = 1) {
         'has_previous' => $current_page > 1,
         'has_next' => $current_page < $total_pages
     ];
+}
+
+/**
+ * Hash de contraseña
+ */
+function hash_password($password) {
+    return password_hash($password, PASSWORD_DEFAULT);
+}
+
+/**
+ * Verificar contraseña
+ */
+function verify_password($password, $hash) {
+    return password_verify($password, $hash);
+}
+
+/**
+ * Validar fortaleza de contraseña
+ */
+function is_strong_password($password) {
+    return strlen($password) >= 8;
+}
+
+/**
+ * Requiere que el usuario esté logueado
+ */
+function require_login() {
+    if (!is_logged_in()) {
+        redirect('login.php', 'Debes iniciar sesión para acceder a esta página', 'error');
+    }
+}
+
+/**
+ * Requiere que el usuario sea administrador
+ */
+function require_admin() {
+    require_login();
+    if (!is_admin()) {
+        redirect('index.php', 'No tienes permisos para acceder a esta página', 'error');
+    }
+}
+
+/**
+ * Formatear nombre de usuario
+ */
+function format_author_name($user) {
+    if (!$user) return 'Usuario desconocido';
+    
+    if (!empty($user['first_name']) && !empty($user['last_name'])) {
+        return htmlspecialchars($user['first_name'] . ' ' . $user['last_name']);
+    } else {
+        return htmlspecialchars($user['username']);
+    }
 }
 ?>

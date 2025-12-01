@@ -107,3 +107,85 @@ body {
 .http-post { border-left-color: #ffc107; }
 .http-put { border-left-color: #17a2b8; }
 .http-delete { border-left-color: #dc3545; }
+
+/* Agregar estos estilos al final del archivo */
+
+/* Estilos para el sistema de autenticación */
+.login-container {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.register-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.profile-stats .card {
+    transition: transform 0.2s;
+}
+
+.profile-stats .card:hover {
+    transform: translateY(-2px);
+}
+
+/* Mejoras para la navegación de usuario */
+.navbar .dropdown-menu {
+    min-width: 200px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Estilos para información de autor */
+.author-info {
+    background-color: #f8f9fa;
+    border-left: 4px solid #007bff;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+.author-badge {
+    font-size: 0.8em;
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+/* Estados de productos */
+.product-status-available { color: #28a745; }
+.product-status-low { color: #ffc107; }
+.product-status-out { color: #dc3545; }
+
+/* Mejoras responsive */
+@media (max-width: 768px) {
+    .profile-stats .card-body {
+        padding: 1rem;
+    }
+    
+    .author-info {
+        margin-top: 1rem;
+    }
+}
+
+/* Animaciones suaves */
+.card {
+    transition: all 0.3s ease;
+}
+
+.btn {
+    transition: all 0.2s ease;
+}
+
+/* Mejoras en formularios */
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.1);
+}
+
+.required::after {
+    content: " *";
+    color: #dc3545;
+}
