@@ -1,0 +1,109 @@
+/* Estilos personalizados para Mi Tienda */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.product-image {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.price {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.stock {
+    font-size: 0.9rem;
+}
+
+.stock-in {
+    color: #28a745;
+}
+
+.stock-low {
+    color: #ffc107;
+}
+
+.stock-out {
+    color: #dc3545;
+}
+
+.btn-action {
+    margin: 0 2px;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.required::after {
+    content: " *";
+    color: #dc3545;
+}
+
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.upload-preview {
+    max-width: 200px;
+    max-height: 200px;
+    display: none;
+}
+
+.pagination {
+    margin-bottom: 0;
+}
+
+.badge-category {
+    font-size: 0.8em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn-action {
+        display: block;
+        width: 100%;
+        margin: 2px 0;
+    }
+    
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+}
+
+/* API documentation styles */
+.api-endpoint {
+    background-color: #f8f9fa;
+    border-left: 4px solid #007bff;
+    padding: 15px;
+    margin: 10px 0;
+    font-family: 'Courier New', monospace;
+}
+
+.http-get { border-left-color: #28a745; }
+.http-post { border-left-color: #ffc107; }
+.http-put { border-left-color: #17a2b8; }
+.http-delete { border-left-color: #dc3545; }

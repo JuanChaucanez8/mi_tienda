@@ -1,0 +1,54 @@
+# Habilitar rewrite engine
+RewriteEngine On
+
+# Redireccionar a HTTPS si está disponible (opcional)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Prevenir acceso a archivos sensibles
+<Files "*.sql">
+    Deny from all
+</Files>
+
+<Files "*.log">
+    Deny from all
+</Files>
+
+<Files "db.php">
+    Deny from all
+</Files>
+
+<Files "functions.php">
+    Deny from all
+</Files>
+
+# Configurar cabeceras de seguridad
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+</IfModule>
+
+# Configurar PHP settings (si está permitido)
+<IfModule mod_php7.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 10M
+    php_value max_execution_time 60
+    php_value max_input_time 60
+    php_value memory_limit 128M
+</IfModule>
+
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 10M
+    php_value max_execution_time 60
+    php_value max_input_time 60
+    php_value memory_limit 128M
+</IfModule>
+
+# URL amigables para la API (opcional)
+RewriteRule ^api/products/?$ api.php?action=list [QSA,L]
+RewriteRule ^api/products/([0-9]+)/?$ api.php?action=get&id=$1 [QSA,L]
+RewriteRule ^api/products/search/([^/]+)/?$ api.php?action=list&search=$1 [QSA,L]
+RewriteRule ^api/products/category/([^/]+)/?$ api.php?action=list&category=$1 [QSA,L]
